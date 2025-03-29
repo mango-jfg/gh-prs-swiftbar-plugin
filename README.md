@@ -6,13 +6,16 @@ The `gh-prs.1h.sh` script is a SwiftBar plugin that displays open pull requests 
 
 Key features:
 - Displays the number of open PRs.
-- Shows detailed information about each PR, including title, author, age, and requested reviewers.
+- Shows detailed information about each PR.
+- You can find the title and the author and when the PR got enough approves you can see a tick after the title.
+- In the dropdown, when the option key (⌥) is pressed, it shows the age and the requested reviewers.
+- Click on the item opens the PR page in your browser.
 - Allows toggling between "all PRs" and "requested PRs" views.
 - Provides manual refresh and error handling for missing dependencies or configuration.
 
 ### How to use
 
-  * Just drop the plugin into your swiftbar plugins folder 
+  * Just copy the plugin shell script into your swiftbar plugins folder 
   * Then choose `Refresh all` from the swiftbar menu
 
 ### Dependecies
@@ -27,7 +30,7 @@ https://cli.github.com/manual/
 `brew install gh`
 `gh auth login`
 
-and you need an envirenment variable with your github org name:
+and you need an environment variable with your github org name:
 `GITHUB_OWNER=owner`
 
 ### Configuration

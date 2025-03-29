@@ -7,10 +7,10 @@
 # <xbar.desc>Show open PRs in all repo of an organization from github</xbar.desc>
 # <xbar.dependencies>gh CLI, jq</xbar.dependencies>
 
-# <xbar.hideAbout>true</xbar.hideAbout>
-# <xbar.hideRunInTerminal>true</xbar.hideRunInTerminal>
-# <xbar.hideDisablePlugin>true</xbar.hideDisablePlugin>
-# <xbar.hidexbar>true</xbar.hidexbar>
+# <swiftbar.hideAbout>true</swiftbar.hideAbout>
+# <swiftbar.hideRunInTerminal>true</swiftbar.hideRunInTerminal>
+# <swiftbar.hideDisablePlugin>true</swiftbar.hideDisablePlugin>
+# <swiftbar.hideSwiftBar>true</swiftbar.hideSwiftBar>
 
 MANUAL_REFRESH_TITLE="-> Manual refresh | refresh=true"
 SEP="---"
