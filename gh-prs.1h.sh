@@ -80,15 +80,17 @@ fi
 
 # function to format the data of one repo's PRs
 format_rows (){
-    while read -r title; do
-        read -r url
-        read -r author
-        read -r createdAt
-        read -r reviewRequests
-        read -r reviewDecision
+    echo $1 | jq -c '.[]' | while read -r item; do
+        # extract the fields from the JSON object
+        title=$(echo $item | jq -r '.title')
+        url=$(echo $item | jq -r '.url')
+        author=$(echo $item | jq -r '.author.login')
+        createdAt=$(echo $item | jq -r '.createdAt')
+        reviewRequests=$(echo $item | jq -r '.reviewRequests')
+        reviewDecision=$(echo $item | jq -r '.reviewDecision')
 
         # if the title contains a pipe char, replace it with a ¦, because it is used as a separator
-        title=$(echo $title | sed 's/|/¦/g')
+        title=${title//|/¦}
 
         # calculate the number of days since the PR was created
         current_date=$(date -u +"%s")
@@ -117,19 +119,22 @@ OUTPUT=""
 
 # for each repository with open PRs, retrieve the PRs and format them
 for REPO in $REPOS_W_PR; do
-    NAME=$(echo "== $REPO ========== | size=15 href=https://github.com/$GITHUB_OWNER/$REPO/pulls")
-    # get PRs with the filter and extract the title, url, author, createdAt, reviewRequests and reviewDecision fields with jq and format it
-    PRS=$(gh pr list --repo $GITHUB_OWNER/$REPO -S "$FILTER" --json title,url,reviewRequests,author,createdAt,reviewDecision | jq -r '.[] | "\(.title)\n\(.url)\n\(.author.login)\n\(.createdAt)\n\(.reviewRequests)\n\(.reviewDecision)"' | format_rows)
-    if [ -n "$PRS" ]; then
+    NAME="== $REPO ========== | size=15 href=https://github.com/$GITHUB_OWNER/$REPO/pulls"
+    # get PRs with the filter and extract the title, url, author, createdAt, reviewRequests and reviewDecision fields
+    PRS=$(gh pr list --repo $GITHUB_OWNER/$REPO -S "$FILTER" --json title,url,reviewRequests,author,createdAt,reviewDecision)
+    N=$(echo "$PRS" | jq '. | length')
+    # if there are PRs, format them and add them to the output
+    if [ "$N" -gt 0 ]; then
+        NUM_OF_PRS=$(($NUM_OF_PRS + $N))
+        # format the PRs and add them to the output
+        PRS=$(format_rows "$PRS")
         OUTPUT="$OUTPUT\n$NAME\n$PRS\n$SEP\n"
-        # add the half of the $PR line count to the total line count, because every PR has 2 lines
-        NUM_OF_PRS=$(($NUM_OF_PRS + $(echo "$PRS" | wc -l | tr -d '[:space:]') / 2))
     fi
 done
 
 # if no PRs are found, display a message
 if [ -z "$OUTPUT" ]; then
-    OUTPUT="No PRs found 👍 | color=SpringGreen"
+    OUTPUT="No PRs found 👍 | color=SpringGreen\n$SEP"
 fi
 
 # display the number of PRs or a relaxed face if there are none
@@ -141,7 +146,6 @@ fi
 
 echo $SEP
 echo -e "$OUTPUT"
-echo $SEP
 echo $MANUAL_REFRESH_TITLE
 
 # display the option to change the filter 
