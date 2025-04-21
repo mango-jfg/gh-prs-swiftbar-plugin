@@ -13,6 +13,10 @@ Key features:
 - Allows toggling between "all PRs" and "requested PRs" views.
 - Provides manual refresh and error handling for missing dependencies or configuration.
 
+<p align="center">
+ <img width="539" alt="Screenshot of a sample dropdown menu" src="dropdown1.jpg">
+</p>
+
 ### How to use
 
   * Just copy the plugin shell script into your swiftbar plugins folder 
